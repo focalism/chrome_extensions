@@ -18,8 +18,8 @@ function showWeather(result){
         table += "<tr>"
         table += "<td>"+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'</td>';
         table += '<td>'+list[i].weather[0].description+'</td>';
-        table += '<td>'+Math.round(list[i].temp.min-273.13)+' °C</td>';
-        table += '<td>'+Math.round(list[i].temp.max-273.13)+' °C</td>';
+        table += '<td>'+Math.round(list[i].main.temp_min-273.13)+' °C</td>';
+        table += '<td>'+Math.round(list[i].main.temp_max-273.13)+' °C</td>';
         table += '</tr>'
     }
     table += '</table>';
@@ -28,5 +28,5 @@ function showWeather(result){
 
 var city = localStorage.city;
 city = city?city:'beijing';
-var url = 'http://api.openweathermap.org/data/2.5/forecast/daily?q='+city+',china&lang=zh_cn';
+var url = 'http://api.openweathermap.org/data/2.5/forecast?q='+city+',china&lang=zh_cn&appid=ba254de8abf73015097c01c67951616b'
 httpRequest(url,showWeather)
