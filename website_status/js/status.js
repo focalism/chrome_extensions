@@ -1,6 +1,7 @@
 function httpRequets(url,callback){
     var xhr = new XMLHttpRequest();
     xhr.open("GET",url,true);
+    console.log(xhr.responseText)
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4){
             callback(true);
@@ -14,9 +15,9 @@ function httpRequets(url,callback){
 
 
 function checkStatus(){
-    httpRequets("http://www.google.com.hk",function(status){
+    httpRequets("https://www.google.com.hk/",function(status){
         chrome.browserAction.setIcon({path:'images/'+(status?'online.png':"offline.png")});
-        setTimeout(checkStatus,5000)
+        setTimeout(checkStatus,3000);
     });
 }
 

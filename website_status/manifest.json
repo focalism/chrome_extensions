@@ -15,9 +15,9 @@
         }
     },
     "background":{
-        "script":["js/status.js"]
+        "scripts":["js/status.js"]
     },
     "permissions":[
-        "http://www.google.com.hk"
+        "https://www.google.com.hk/"
     ]
 }
