@@ -16,8 +16,8 @@
         "default_title":"天气预报",
         "default_popup":"popup.html"
     },
-    "option_page":"option.html",
+    "options_page":"options.html",
     "permissions":[
-        "http://api.openweathermap.org/data/2.5"
+        "https://samples.openweathermap.org/data/2.5/forecast/daily?q=*"
     ]
 }
