@@ -1,0 +1,103 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+    @font-face {
+        font-family: 'iconfont';
+        src: url('iconfont.woff') format('woff'); /* iOS 4.1- */
+    }
+
+    * {
+        padding: 0;
+        margin:0;
+    }
+
+    body{
+        background: #2d2d2d;
+    }
+
+    #appTitle{
+        height: 60px;
+        line-height:60px;
+        padding: 0 20px;
+        font-size: 24px;
+        color: #ccc;
+        background: #222;
+    }
+
+    #path{
+        height: 40px;
+        line-height:40px;
+        padding: 0 20px;
+        columns: #888;
+        font-size: 16px;
+        color: white;
+        background: #222;
+        border-bottom: black 1px solid;
+        box-sizing: border-box;
+    }
+
+    #path span{
+        display: inline;
+        float: left;
+    }
+
+    #path span.name{
+        max-width: 100px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #path span.pointer{
+        padding: 0 10px 0 5px
+    }
+
+    #container .item{
+        display: block;
+        height:150px;
+        width: 150px;
+        float: left;
+        color: white;
+    }
+
+    #container .item .icon{
+        display:block;
+        text-align: center;
+        height: 80px;
+        line-height: 80px;
+        font-size:60px;
+        font-family: 'iconfont'
+    }
+
+    #container .item .text{
+        display: block;
+        text-align: center;
+        padding: 0 5px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 14px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .iconfont {
+        font-family:"iconfont" !important;
+        font-size:80px;
+        font-style:normal;
+        display:inline;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-stroke-width: 0.2px;
+        -moz-osx-font-smoothing: grayscale;
+        vertical-align:baseline;
+        text-decoration:inherit;
+}
+</style>
+</head>
+<body>
+    <div id = "appTitle">Media Manager</div>
+    <div id = "path"><span class="name"> 媒体库</span><span class="pointer">»</span></div>
+    <div id = "container"></div>
+    <script src = "main.js"></script>
+</body>
+</html>
