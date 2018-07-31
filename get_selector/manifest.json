@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "获取页面元素的选择器",
+    "version": "1.0",
+    "description": "获取页面元素的选择器",
+    "content_scripts": [
+        {
+            "matches": ["*://www.google.com.hk/*"],
+            "js": ["js/get_selector.js"]
+        }
+    ],
+    "browser_action":{
+        "default_title":"获取定位符",
+        "default_popup":"popup.html"
+    }
+}
