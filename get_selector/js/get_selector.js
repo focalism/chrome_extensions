@@ -17,6 +17,7 @@ function combo(arr, num) {
 
 function ifUnique(cssSelector){
     selector = document.querySelectorAll(cssSelector);
+    console.log(selector)
     if(selector.length==1){
         return true;
     }else{
@@ -66,12 +67,15 @@ function get_selector(){
             else if(attr.name === 'class'){
                 classList = attr.value.split(' ');
                 if(classList.length > 0){
-                    for(i=1;i<classList.length;i++){
+                    for(i=1;i<=classList.length;i++){
                         classPartList = combo(classList, i);
-                        console.log(classPartList);
+                        console.log(classPartList[0])
+                        console.log('--------------');
                         for(var item of classPartList){
                             console.log(item)
+                            console.log('--------------');
                             selectorName = nodeName + '.' + item.join('.');
+                            console.log(selectorName)
                             if(ifUnique(selectorName)){
                                 cssSelector = selectorName;
                                 break;
@@ -89,20 +93,22 @@ function get_selector(){
             }
 
             else{
-                selectorName = nodeName + `[${attr.name}="${attr.value}"]`
+                selectorName = nodeName + `[${attr.name}="${attr.value}"]`;
                 if(ifUnique(selectorName)){
                     cssSelector = selectorName;
+                    break;
                 }
             }
 
         }
     }
 
+    console.log(cssSelector);
     if(cssSelector){
         alert(cssSelector);
     }
     else{
-        for(var j = 2;j<attributes.length;j++){
+        for(var j = 2;j<=attributes.length;j++){
             attributePartList = combo(attrNameValueList, j)
             selectorName = nodeName + attributePartList.join('')
             if(ifUnique(selectorName)){
