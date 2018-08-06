@@ -3,11 +3,11 @@ function combo(arr, num) {
     var result = [];
     var range = function(r, _arr) {
       if (r.length == num) {
-        result.push(r)
+        result.push(r);
       } else {
-        let l = r.length;
+        var l = r.length;
         for (var i = 0, len = _arr.length - num + l; i <= len; i++) {
-          range(r.concat(_arr[i]), _arr.slice(i + 1))
+          range(r.concat(_arr[i]), _arr.slice(i + 1));
         }
       }
     }
@@ -17,21 +17,11 @@ function combo(arr, num) {
 
 function ifUnique(cssSelector){
     selector = document.querySelectorAll(cssSelector);
-    console.log(selector)
     if(selector.length==1){
         return true;
     }else{
         return false;
     }
-}
-
-function getSelector(){
-    this.id = id;
-    this.name = name;
-    this.className = className;
-    this.nodeName = nodeName;
-    this.nodeType = nodeType;
-    this.parentNode = parentNode;
 }
 
 function getAttributesFormat(attributeList){
@@ -42,89 +32,93 @@ function getAttributesFormat(attributeList){
     return attrNameValueList;
 }
 
+function getSelectorByNodeName(nodeName){
+    if(ifUnique(nodeName)){
+        return nodeName;
+    }
+
+}
+function getSelectorById(idName){
+    selectorName = '#' + idName;
+    if(ifUnique(selectorName)){
+        return selectorName;
+    }
+}
+
+function getSelectorByClass(nodeName, className){
+    classList = className.split(' ');
+    if(classList.length > 0){
+        for(i=1;i<=classList.length;i++){
+            classPartList = combo(classList, i);
+            for(var item of classPartList){
+                selectorName = nodeName + '.' + item.join('.');
+                if(ifUnique(selectorName)){
+                    return  selectorName;
+                }
+            }
+        }
+    }
+}
+
+function getSelectorByAttrName(nodeName, nameAttr){
+    if(document.getElementsByName(nameAttr)){
+        return nodeName + `[name="${nameAttr}"]`;
+    }
+}
+
+function getSelectorByAttr(nodeName, attrNameValueList){
+    console.log(attrNameValueList);
+    for(var j = 1;j<=attributes.length;j++){
+        attributePartList = combo(attrNameValueList, j);
+        console.log(attributePartList);
+        for(var item of attributePartList){
+            selectorName = nodeName + item.join('');
+            if(ifUnique(selectorName)){
+                return selectorName;
+            }
+        }
+
+    }
+}
+
+function getSelector(el){
+    attributes = el.attributes;
+    attrNameValueList = getAttributesFormat(attributes);
+    var nodeName = el.nodeName.toLowerCase();
+    var cssSelector  = getSelectorByNodeName(nodeName);
+    if(attributes.length > 0){
+        if(!cssSelector && attributes.id){
+            cssSelector = getSelectorById(attributes.id.value);
+        }
+        if(!cssSelector && attributes.class){
+            cssSelector = getSelectorByClass(nodeName, attributes.class.value);
+        }
+        if(!cssSelector && attributes.name){
+            cssSelector = getSelectorByAttrName(nodeName, attributes.name.value);
+        }
+        if(!cssSelector){
+            cssSelector =  getSelectorByAttr(nodeName, attrNameValueList);
+        }
+    }
+    if(!cssSelector){
+        parentNode = el.parentNode;
+        console.log(parentNode.nodeName);
+        console.log(parentNode.attributes);
+        cssSelector = getSelector(parentNode);
+    }
+    return cssSelector;
+}
 
 function get_selector(){
     var e = event || window.event;
     var elementFromPoint = document.elementFromPoint(e.clientX, e.clientY);
-    attributes = elementFromPoint.attributes;
-    attrNameValueList = getAttributesFormat(attributes);
-    console.log(attributes)
-    var nodeName = elementFromPoint.nodeName.toLowerCase();
-    console.log(nodeName)
-    console.log(attributes.id)
-    var cssSelector;
-    if(attributes.length > 0){
-        for(var attr of attributes){
-            if (attr.name === 'id'){
-                selectorName = '#' + attr.value;
-                console.log(selectorName)
-                if(ifUnique(selectorName)){
-                    cssSelector = selectorName;
-                    break;
-                }
-            }
-
-            else if(attr.name === 'class'){
-                classList = attr.value.split(' ');
-                if(classList.length > 0){
-                    for(i=1;i<=classList.length;i++){
-                        classPartList = combo(classList, i);
-                        console.log(classPartList[0])
-                        console.log('--------------');
-                        for(var item of classPartList){
-                            console.log(item)
-                            console.log('--------------');
-                            selectorName = nodeName + '.' + item.join('.');
-                            console.log(selectorName)
-                            if(ifUnique(selectorName)){
-                                cssSelector = selectorName;
-                                break;
-                            }
-                        }
-    
-                    }
-                }
-            }
-            else if(attr.name == 'name'){
-                if(document.getElementsByName(attr.value)){
-                    cssSelector = attr.value;
-                    break;
-                }
-            }
-
-            else{
-                selectorName = nodeName + `[${attr.name}="${attr.value}"]`;
-                if(ifUnique(selectorName)){
-                    cssSelector = selectorName;
-                    break;
-                }
-            }
-
-        }
-    }
-
-    console.log(cssSelector);
+    cssSelector = getSelector(elementFromPoint)
     if(cssSelector){
         alert(cssSelector);
-    }
-    else{
-        for(var j = 2;j<=attributes.length;j++){
-            attributePartList = combo(attrNameValueList, j)
-            selectorName = nodeName + attributePartList.join('')
-            if(ifUnique(selectorName)){
-                cssSelector = selectorName;
-            }
-        }
-        if(cssSelector){
-            alert(cssSelector)
-        }else{
-            alert('cant not find the selector');
-        }
-    }
-
-
+    }else{
+        alert('cant not find the selector');
+    }   
 }
-
 
 document.addEventListener("mousedown", get_selector);
 document.removeEventListener("mouseup", get_selector);
