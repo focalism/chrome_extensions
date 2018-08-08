@@ -49,7 +49,12 @@ function getSelectorById(idName){
 }
 
 function getSelectorByClass(nodeName, className){
-    let classList = className.split(' ');
+    className  = className.replace(/^\s+|\s+$/g,"");
+    let classList = className.split(/\s+/);
+    for(let i = 0;i<classList.length; i++){
+        classList[i] = classList[i].replace(/\n[\s| | ]*\r/g,'\n')
+    }
+    console.log(classList)
     let classSlectorList = []
     if(classList.length > 0){
         for(let i=1;i<=classList.length;i++){
@@ -129,14 +134,12 @@ function getSelector(el, parent =false){
         allSelectorDict[`parent${parentId}`] = selectorList
     }
 
-    console.log(parentId, status)
     if(!status){
         parentId += 1
         let parentNode = el.parentNode;
-        console.log(parentNode)
         getSelector(parentNode, parent=parentId);
     }
-
+    console.log(allSelectorDict)
     let selfSelectorList =  allSelectorDict['self']
     cssSelector = selfSelectorList[selfSelectorList.length-1]
     if(ifUnique(cssSelector)){
@@ -153,8 +156,6 @@ function getSelector(el, parent =false){
             return cssSelector
         }
     }
-
-    
     }
 
 function get_selector(){
