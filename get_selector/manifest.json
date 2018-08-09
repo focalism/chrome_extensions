@@ -5,7 +5,7 @@
     "description": "获取页面元素的选择器",
     "content_scripts": [
         {
-            "matches": ["*://www.google.com.hk/*"],
+            "matches": ["*://newprod.dev.cn/*"],
             "js": ["js/get_selector.js"]
         }
     ]
