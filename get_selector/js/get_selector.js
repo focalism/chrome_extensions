@@ -54,7 +54,6 @@ function getSelectorByClass(nodeName, className){
     for(let i = 0;i<classList.length; i++){
         classList[i] = classList[i].replace(/\n[\s| | ]*\r/g,'\n')
     }
-    console.log(classList)
     let classSlectorList = []
     if(classList.length > 0){
         for(let i=1;i<=classList.length;i++){
@@ -95,15 +94,41 @@ function getSelectorByAttr(nodeName, attrNameValueList){
     return [false, attrSlectorList]
 }
 
-let allSelectorDict = {}
+function getChildIndexOfParent(el){
+    let parentNode = el.parentNode;
+    childNodes = parentNode.childNodes;
+    for(let i = 0; i < childNodes.length;i++){
+        if(childNodes[i] == el){
+            return i+1;
+        }
+    }
+}
+
+function getChildNodeCount(el){
+    let  count = 0;
+    let parentNode = el.parentNode;
+    let nodeName = el.nodeName;
+    let childNodes = parentNode.childNodes;
+    for(let i = 0; i < childNodes.length;i++){
+        if(childNodes[i].nodeName == nodeName){
+            count = count +1
+        }
+    }
+    return count;
+}
+
+let allSelectorDict = {index:[]}
 let parentId = 0
 function getSelector(el, parent =false){
-    let selectorList = []
+    let selectorList = [];
+    let index = getChildIndexOfParent(el)
+    let count = getChildNodeCount(el)
+    allSelectorDict['index'].push({'index':index, 'count': count});
     let attributes = el.attributes;
     let attrNameValueList = getAttributesFormat(attributes);
     let nodeName = el.nodeName.toLowerCase();
     let result  = getSelectorByNodeName(nodeName);
-    let status = result[0]
+    let status = result[0];
     let cssSelector;
     selectorList.push(result[1])
     if(attributes.length > 0){
@@ -129,7 +154,7 @@ function getSelector(el, parent =false){
         }
     }
     if(!parent){
-        allSelectorDict["self"] = selectorList
+        allSelectorDict["parent0"] = selectorList
     }else{
         allSelectorDict[`parent${parentId}`] = selectorList
     }
@@ -139,15 +164,15 @@ function getSelector(el, parent =false){
         let parentNode = el.parentNode;
         getSelector(parentNode, parent=parentId);
     }
-    console.log(allSelectorDict)
-    let selfSelectorList =  allSelectorDict['self']
+
+    let selfSelectorList =  allSelectorDict['parent0']
     cssSelector = selfSelectorList[selfSelectorList.length-1]
     if(ifUnique(cssSelector)){
         return cssSelector
     }
 
 
-    let nodeLength = Object.keys(allSelectorDict).length;
+    let nodeLength = Object.keys(allSelectorDict).length-1;
     let uniqueParentSelectorList = allSelectorDict[`parent${nodeLength-1}`]
     let uniqueParentSelector = uniqueParentSelectorList[uniqueParentSelectorList.length - 1]
     for(selector of selfSelectorList){
@@ -156,10 +181,29 @@ function getSelector(el, parent =false){
             return cssSelector
         }
     }
-    }
+
+    let indexList = allSelectorDict.index;
+    nodeChain = ''
+    for(let i = 0;i< indexList.length-1;i++){
+        childNodeList = allSelectorDict[`parent${i}`]
+        parentNodeList = allSelectorDict[`parent${i+1}`]
+        if(indexList[i].count>1){
+            childNodeName = childNodeList[0]+`:nth-child(${indexList[i].index})` 
+        }
+        else{
+            childNodeName = childNodeList[0]
+        }
+        parentNodeName = parentNodeList[parentNodeList.length - 1]
+        nodeChain = childNodeName + ' ' + nodeChain
+        cssSelector = parentNodeName + ' ' + nodeChain
+        if(ifUnique(cssSelector)){
+            return cssSelector
+        }
+}
+}
 
 function get_selector(){
-    allSelectorDict = {}
+    allSelectorDict = {index:[]}
     parentId = 0
     let  e = event || window.event;
     let  elementFromPoint = document.elementFromPoint(e.clientX, e.clientY);
@@ -173,4 +217,3 @@ function get_selector(){
 
 document.addEventListener("mousedown", get_selector);
 document.removeEventListener("mouseup", get_selector);
-
