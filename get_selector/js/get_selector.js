@@ -26,6 +26,9 @@ function ifUnique(cssSelector){
 function getAttributesFormat(attributeList){
     let attrNameValueList = [];
     for(let  attr of attributeList){
+        if(attr.value.length>20){
+            continue;
+        }
         attrNameValueList.push(`[${attr.name}="${attr.value}"]`);
     }
     return attrNameValueList;
